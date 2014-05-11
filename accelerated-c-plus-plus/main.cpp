@@ -6,63 +6,52 @@
 //  Copyright (c) 2014 Personal. All rights reserved.
 //
 
+#include <iomanip>
+#include <ios>
 #include <iostream>
 #include <string>
 
-// defining which standard library names we use
-using std::cin; using std::cout; using std::endl; using std::string;
+using std::cin;     using std::setprecision;
+using std::cout;    using std::string;
+using std::endl;    using std::streamsize;
 
-int main()
-{
-    // ask for the person's name
+int main() {
+    // ask for and read the student's name
     cout << "Please enter your first name: ";
-    
-    // read the name
     string name;
     cin >> name;
-
-    // build the greeting
-    const string greeting = "Hello, " + name + "!";
+    cout << "Hello, " << name << "!" << endl;
     
-    // ask for padding
-    cout << "Please enter the amount of padding required: ";
+    // ask for and read the midterm and final grades
+    cout << "Please enter your midterm and final grades: ";
+    double midterm, final;
+    cin >> midterm >> final;
     
-    // read the padding
-    int pad;
-    cin >> pad;
+    // ask for the homework grades
+    cout << "Enter all your homework grades, followed by end-of-file: ";
     
-    // number of rows and columns to write
-    const int rows = pad * 2 + 3;
-    const string::size_type cols = greeting.size() + pad * 2 + 2;
+    // the number and sum of grades read so far
+    int count = 0;
+    double sum = 0;
     
-    // seperate output from input
-    cout << endl;
+    // a variable into which to read
+    double x;
     
-    // invariant: we have written r rows so far;
-    for (int r = 0; r != rows; ++r) {
-        string::size_type c = 0;
-        
-        // invariant: we have written c characters so far in the current row
-        while (c != cols) {
-    
-            // write greeting?
-            if (r == pad + 1 && c == pad + 1) {
-                cout << greeting;
-                c += greeting.size();
-            } else {
-                
-                // write border?
-                if (r == 0 || r == rows - 1 || c == 0 || c == cols - 1)
-                    cout << "*";
-                else
-                    cout << " ";
-                ++c;
-            }
-        }
-        
-        cout << endl;
+    // invariant: we have read count grades so far
+    // and sum is the sum of the first count grades
+    while (cin >> x) {
+        ++count;
+        sum += x;
     }
+    
+    // set precision to 3, return previous value
+    streamsize prec = cout.precision(3);
+    
+    // write the result
+    cout << "Your final grade is " << 0.2 * midterm + 0.4 * final + 0.4 * sum / count << endl;
+    
+    // reset precision to original value
+    cout.precision(prec);
     
     return 0;
 }
-
